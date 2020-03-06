@@ -74,9 +74,7 @@ void Listener(LPVOID Listener_socket)
 
 		if (pNewConnection == 0)
 		{
-
 			std::cout << "Error\n";
-
 		}
 		else
 		{
@@ -86,8 +84,6 @@ void Listener(LPVOID Listener_socket)
 	}
 
 	delete psParam;
-	
-
 }
 
 
@@ -105,26 +101,41 @@ bool TpcServer::Start(std::string ip, int port)
 	{
 		std::cout << "WSAStartup failed with error: %d\n" << nResult;
 	}
-	std::cout << "Server started.\n";
+	
 	SOCKADDR_IN pAddr;
 	int nSizeOfAddr = sizeof(pAddr);
-	pAddr.sin_port = htons(m_nPort);
-	pAddr.sin_family = AF_INET;
-	inet_pton(AF_INET, m_cIp.c_str(), &(pAddr.sin_addr));
+	pAddr.sin_port = htons(m_nPort);//конверт порта
+	pAddr.sin_family = AF_INET;//ipv4
+	inet_pton(AF_INET, m_cIp.c_str(), &(pAddr.sin_addr));//конверт ip
 
 
-	SOCKET pListenerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	::bind(pListenerSocket, (SOCKADDR*)&pAddr, nSizeOfAddr);
-	::listen(pListenerSocket, 10);
+	SOCKET pListenerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);//sock_stream для tcp
 
-	sParam *psParam = new sParam();
-	psParam->pTpcServer = this;
-	psParam->hSocket = pListenerSocket;
+	int nPortStatus = ::bind(pListenerSocket, (SOCKADDR*)&pAddr, nSizeOfAddr);//The bind function associates a local address with a socket.
+	if (nPortStatus != SOCKET_ERROR)
+	{
+		std::cout << "Port " << m_nPort << " is open " << std::endl;
+		
+		::listen(pListenerSocket, 10);
+
+		sParam *psParam = new sParam();
+		psParam->pTpcServer = this;
+		psParam->hSocket = pListenerSocket;
 
 
-	HANDLE hHandle = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Listener, psParam, NULL, NULL);
+		HANDLE hHandle = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Listener, psParam, NULL, NULL);
 
-	return hHandle > 0;
+		std::cout << "Server started at " << m_cIp << "\n";
+
+		return hHandle > 0;
+	}
+	else
+	{
+		std::cout << "Port " << m_nPort << " is close, restart" << std::endl;
+		return false;
+	}
+
+	
 }
 
 void TpcServer::Stop()
