@@ -65,5 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\server\server\server.json" />
+    <None Include="server.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
