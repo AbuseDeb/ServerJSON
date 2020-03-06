@@ -16,15 +16,9 @@ CmdCommand::CmdCommand()
 	};
 }
 
-
 CmdCommand::~CmdCommand()
 {
 }
-
-
-
-
-
 
 bool CmdCommand::GetCommand(std::string &cCommand)
 {
@@ -85,8 +79,8 @@ bool CmdCommand::GetCommand(std::string &cCommand)
 			}
 		}
 
-		else
-			std::cout << it->second.size() << " != " << vcCommand.size() << std::endl;
+		//else
+			//std::cout << it->second.size() << " != " << vcCommand.size() << std::endl;
 	}
 
 	if (m_Command != CmdCommandNone)

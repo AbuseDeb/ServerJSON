@@ -54,7 +54,7 @@ void TpcServer::CreateUserSocket(SOCKET newConnection)
 
 	m_Clients.push_back((TcpClient *)pClient);
 	
-	std::cout << "Socket conected client" << newConnection;
+	//std::cout << "Socket conected client " << newConnection;
 
 	m_Mutex.unlock();
 
